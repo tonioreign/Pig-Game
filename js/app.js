@@ -13,51 +13,61 @@ const player0El = document.querySelector('.player--0');
 const player1El = document.querySelector('.player--1');
 const playerActive = document.querySelector('.player--active');
 
-
-
-
 //Adding Elements
 diceEl.classList.add('hidden');
-
-
 
 //Identifying variables
 const scores = [0, 0];
 let currentScore = 0;
 let activePlayer = 0;
+let playing = true;
 
 //Functions
 
 const switchPlayers = () => {
-    document.getElementById(`current--${activePlayer}`).textContent = 0; 
-    currentScore = 0;
-    activePlayer = activePlayer === 0 ? 1 : 0;
-    player1El.classList.toggle('player--active'); //adds or removes the class selected
-    player0El.classList.toggle('player--active');
-}
+  document.getElementById(`current--${activePlayer}`).textContent = 0;
+  currentScore = 0;
+  activePlayer = activePlayer === 0 ? 1 : 0;
+  player1El.classList.toggle('player--active'); //adds or removes the class selected
+  player0El.classList.toggle('player--active');
+};
 
 //Rolling dice functionality
 btnRoll.addEventListener('click', e => {
-    let dice = Math.floor(Math.random()*6) + 1;
+  if (playing) {
+    let dice = Math.floor(Math.random() * 6) + 1;
     diceEl.classList.remove('hidden');
     diceEl.src = `img/dice-${dice}.png`;
 
     if (dice !== 1) {
-        currentScore += dice;
-        document.getElementById(`current--${activePlayer}`).textContent = currentScore; 
+      currentScore += dice;
+      document.getElementById(`current--${activePlayer}`).textContent =
+        currentScore;
+    } else {
+      switchPlayers();
     }
-    else {
-        switchPlayers();
-    }
-})
+  }
+});
 
 //Hold functionality
 btnHold.addEventListener('click', e => {
+  if (playing) {
     scores[activePlayer] += currentScore;
-    document.getElementById(`score--${activePlayer}`).textContent = scores[activePlayer];
-    switchPlayers();
+    document.getElementById(`score--${activePlayer}`).textContent =
+      scores[activePlayer];
 
-    if (scores[activePlayer] == 100) {
-
+    if (scores[activePlayer] >= 20) {
+      playing = false;
+      document
+        .querySelector(`.player--${activePlayer}`)
+        .classList.add('player--winner');
+      document
+        .querySelector(`.player--${activePlayer}`)
+        .classList.remove('player--active');
+    } else {
+      switchPlayers();
     }
-})
+  }
+});
+
+//Reset Game
