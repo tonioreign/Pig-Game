@@ -17,7 +17,7 @@ const playerActive = document.querySelector('.player--active');
 diceEl.classList.add('hidden');
 
 //Identifying variables
-const scores = [0, 0];
+let scores = [0, 0];
 let currentScore = 0;
 let activePlayer = 0;
 let playing = true;
@@ -56,7 +56,7 @@ btnHold.addEventListener('click', e => {
     document.getElementById(`score--${activePlayer}`).textContent =
       scores[activePlayer];
 
-    if (scores[activePlayer] >= 20) {
+    if (scores[activePlayer] >= 100) {
       playing = false;
       document
         .querySelector(`.player--${activePlayer}`)
@@ -71,3 +71,19 @@ btnHold.addEventListener('click', e => {
 });
 
 //Reset Game
+btnNew.addEventListener('click', e => {
+  const score0El = (document.querySelector('#score--0').textContent = 0);
+  const score1El = (document.querySelector('#score--1').textContent = 0);
+  const current0El = (document.querySelector('#current--0').textContent = 0);
+  const current1El = (document.querySelector('#current--1').textContent = 0);
+  currentScore = 0;
+  scores = [0, 0];
+  player1El.classList.remove('player--active'); //adds or removes the class selected
+  player0El.classList.add('player--active');
+  document
+    .querySelector(`.player--${activePlayer}`)
+    .classList.remove('player--winner');
+  diceEl.classList.add('hidden');
+  activePlayer = 0;
+  playing = true;
+});
